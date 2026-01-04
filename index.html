@@ -141,6 +141,9 @@
                         <div class="grid-cell grid-header opt-col opt-type col-hidden">Type</div>
                         <div class="grid-cell grid-header opt-col opt-bs1 col-hidden">BS1</div>
                         <div class="grid-cell grid-header opt-col opt-bs2 col-hidden">BS2</div>
+                        <div class="grid-cell grid-header opt-col opt-ctManufacturer col-hidden">CT Mfg</div>
+                        <div class="grid-cell grid-header opt-col opt-ctSeal col-hidden">CT Seal</div>
+                        
                         <div class="grid-cell grid-header" style="min-width: 80px;">Status</div>
                         <div class="grid-cell grid-header"><i class="fa-solid fa-trash"></i></div>
                     </div>
@@ -185,6 +188,8 @@
                 <label class="flex items-center gap-2"><input type="checkbox" id="tog-type" onchange="updateColumns(); saveDraft()"> Meter Type</label>
                 <label class="flex items-center gap-2"><input type="checkbox" id="tog-bs1" onchange="updateColumns(); saveDraft()"> Body Seal 1</label>
                 <label class="flex items-center gap-2"><input type="checkbox" id="tog-bs2" onchange="updateColumns(); saveDraft()"> Body Seal 2</label>
+                <label class="flex items-center gap-2"><input type="checkbox" id="tog-ctManufacturer" onchange="updateColumns(); saveDraft()"> CT Manufacturer</label>
+                <label class="flex items-center gap-2"><input type="checkbox" id="tog-ctSeal" onchange="updateColumns(); saveDraft()"> CT Seal</label>
             </div>
             <button onclick="document.getElementById('settingsModal').classList.add('hidden')" class="w-full bg-surface2 text-white py-2.5 rounded hover:bg-border font-bold">Done</button>
         </div>
@@ -225,7 +230,11 @@
         const state = {
             user: JSON.parse(localStorage.getItem('reb_user_v8')) || null,
             history: JSON.parse(localStorage.getItem('reb_history_cache')) || [],
-            defaults: { manufacturerId: '581', meterType: 'j-39', bodySeal1: 'LS', bodySeal2: 'LS', initialReading: '0', kwhReading: '0', demandReading: '0' }
+            defaults: { 
+                manufacturerId: '581', meterType: 'j-39', bodySeal1: 'LS', bodySeal2: 'LS', 
+                initialReading: '0', kwhReading: '0', demandReading: '0',
+                ctManufacturer: '', ctSeal: '' 
+            }
         };
 
         // --- CORE ---
@@ -307,8 +316,10 @@
                         demandReading: row.querySelector('.inp-demand').value, 
                         meterType: row.querySelector('.inp-type').value,
                         bodySeal1: row.querySelector('.inp-bs1').value, 
-                        bodySeal2: row.querySelector('.inp-bs2').value } 
-                    });
+                        bodySeal2: row.querySelector('.inp-bs2').value,
+                        ctManufacturer: row.querySelector('.inp-ctManufacturer').value,
+                        ctSeal: row.querySelector('.inp-ctSeal').value
+                    } });
                 }
             });
 
@@ -389,12 +400,15 @@
                     manufacturerId: row.querySelector('.inp-brand').value, initialReading: row.querySelector('.inp-init').value,
                     kwhReading: row.querySelector('.inp-kwh').value, demandReading: row.querySelector('.inp-demand').value,
                     meterType: row.querySelector('.inp-type').value, bodySeal1: row.querySelector('.inp-bs1').value,
-                    bodySeal2: row.querySelector('.inp-bs2').value, statusHtml: row.querySelector('.status-cell').innerHTML,
+                    bodySeal2: row.querySelector('.inp-bs2').value, 
+                    ctManufacturer: row.querySelector('.inp-ctManufacturer').value,
+                    ctSeal: row.querySelector('.inp-ctSeal').value,
+                    statusHtml: row.querySelector('.status-cell').innerHTML,
                     isSuccess: row.querySelector('.status-cell').classList.contains('text-green-500')
                 });
             });
             localStorage.setItem('reb_draft_rows', JSON.stringify(rows));
-            const settings = {}; ['init','kwh','demand','type','bs1','bs2'].forEach(id => settings[id] = document.getElementById(`tog-${id}`).checked);
+            const settings = {}; ['init','kwh','demand','type','bs1','bs2','ctManufacturer','ctSeal'].forEach(id => settings[id] = document.getElementById(`tog-${id}`).checked);
             localStorage.setItem('reb_settings', JSON.stringify(settings));
         }
         
@@ -414,10 +428,13 @@
                 brand: data ? data.manufacturerId : def.manufacturerId, init: data ? data.initialReading : def.initialReading,
                 kwh: data ? data.kwhReading : def.kwhReading, demand: data ? data.demandReading : def.demandReading,
                 type: data ? data.meterType : def.meterType, bs1: data ? data.bodySeal1 : def.bodySeal1,
-                bs2: data ? data.bodySeal2 : def.bodySeal2, status: data ? data.statusHtml : 'Pending',
+                bs2: data ? data.bodySeal2 : def.bodySeal2, 
+                ctManufacturer: data ? data.ctManufacturer : (def.ctManufacturer || ''), 
+                ctSeal: data ? data.ctSeal : (def.ctSeal || ''),
+                status: data ? data.statusHtml : 'Pending',
                 statusClass: (data && data.isSuccess) ? "text-green-500" : "text-textDim"
             };
-            return `<div class="grid-cell text-textDim text-xs row-index">${index}</div><div class="grid-cell"><input class="sheet-input inp-meter" value="${val.meter}" placeholder="Meter No" oninput="saveDraft()" onkeydown="handleKey(event)"></div><div class="grid-cell"><input class="sheet-input inp-seal" value="${val.seal}" oninput="saveDraft()" onkeydown="handleKey(event)"></div><div class="grid-cell"><select class="sheet-input inp-brand cursor-pointer" onchange="updateGlobalDefault('manufacturerId', this.value)">${getBrandOptions(val.brand)}</select></div><div class="grid-cell opt-col opt-init col-hidden"><input class="sheet-input inp-init" value="${val.init}" oninput="saveDraft()"></div><div class="grid-cell opt-col opt-kwh col-hidden"><input class="sheet-input inp-kwh" value="${val.kwh}" oninput="saveDraft()"></div><div class="grid-cell opt-col opt-demand col-hidden"><input class="sheet-input inp-demand" value="${val.demand}" oninput="saveDraft()"></div><div class="grid-cell opt-col opt-type col-hidden"><input class="sheet-input inp-type" value="${val.type}" onchange="updateGlobalDefault('meterType', this.value)"></div><div class="grid-cell opt-col opt-bs1 col-hidden"><input class="sheet-input inp-bs1" value="${val.bs1}" onchange="updateGlobalDefault('bodySeal1', this.value)"></div><div class="grid-cell opt-col opt-bs2 col-hidden"><input class="sheet-input inp-bs2" value="${val.bs2}" onchange="updateGlobalDefault('bodySeal2', this.value)"></div><div class="grid-cell status-cell text-xs font-bold ${val.statusClass}">${val.status}</div><div class="grid-cell cursor-pointer text-red-400 hover:text-red-200" onclick="deleteRow(this)"><i class="fa-solid fa-trash"></i></div>`;
+            return `<div class="grid-cell text-textDim text-xs row-index">${index}</div><div class="grid-cell"><input class="sheet-input inp-meter" value="${val.meter}" placeholder="Meter No" oninput="saveDraft()" onkeydown="handleKey(event)"></div><div class="grid-cell"><input class="sheet-input inp-seal" value="${val.seal}" oninput="saveDraft()" onkeydown="handleKey(event)"></div><div class="grid-cell"><select class="sheet-input inp-brand cursor-pointer" onchange="updateGlobalDefault('manufacturerId', this.value)">${getBrandOptions(val.brand)}</select></div><div class="grid-cell opt-col opt-init col-hidden"><input class="sheet-input inp-init" value="${val.init}" oninput="saveDraft()"></div><div class="grid-cell opt-col opt-kwh col-hidden"><input class="sheet-input inp-kwh" value="${val.kwh}" oninput="saveDraft()"></div><div class="grid-cell opt-col opt-demand col-hidden"><input class="sheet-input inp-demand" value="${val.demand}" oninput="saveDraft()"></div><div class="grid-cell opt-col opt-type col-hidden"><input class="sheet-input inp-type" value="${val.type}" onchange="updateGlobalDefault('meterType', this.value)"></div><div class="grid-cell opt-col opt-bs1 col-hidden"><input class="sheet-input inp-bs1" value="${val.bs1}" onchange="updateGlobalDefault('bodySeal1', this.value)"></div><div class="grid-cell opt-col opt-bs2 col-hidden"><input class="sheet-input inp-bs2" value="${val.bs2}" onchange="updateGlobalDefault('bodySeal2', this.value)"></div><div class="grid-cell opt-col opt-ctManufacturer col-hidden"><input class="sheet-input inp-ctManufacturer" value="${val.ctManufacturer}" oninput="saveDraft()"></div><div class="grid-cell opt-col opt-ctSeal col-hidden"><input class="sheet-input inp-ctSeal" value="${val.ctSeal}" oninput="saveDraft()"></div><div class="grid-cell status-cell text-xs font-bold ${val.statusClass}">${val.status}</div><div class="grid-cell cursor-pointer text-red-400 hover:text-red-200" onclick="deleteRow(this)"><i class="fa-solid fa-trash"></i></div>`;
         }
 
         function getBrandOptions(selectedId) { return manufacturers.map(m => `<option value="${m.id}" ${m.id == selectedId ? 'selected' : ''}>${m.name}</option>`).join(''); }
@@ -437,7 +454,7 @@
         async function fetchHistory(limit = 300) { try { const res = await fetch(`${API_BASE}/api/all-meter-list`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userid: state.user.userid, password: state.user.password, limit: limit }) }); const d = await res.json(); if(d.data) { updateHistoryCache(d.data); renderHistory(); } } catch(e) { console.log("Fetch failed", e); } }
         function loadSettings() { const settings = JSON.parse(localStorage.getItem('reb_settings')); if(settings) { for(const key in settings) { const el = document.getElementById(`tog-${key}`); if(el) el.checked = settings[key]; } updateColumns(); } }
         function updateColumns() { 
-            const ids = ['init','kwh','demand','type','bs1','bs2']; let cnt = 0; 
+            const ids = ['init','kwh','demand','type','bs1','bs2','ctManufacturer','ctSeal']; let cnt = 0; 
             ids.forEach(id => { const chk = document.getElementById(`tog-${id}`).checked; if(chk) cnt++; document.querySelectorAll(`.opt-${id}`).forEach(el => el.classList.toggle('col-hidden', !chk)); }); 
             if(window.innerWidth < 768) document.getElementById('meterTable').style.gridTemplateColumns = `35px 1fr 1fr 1fr ${'100px '.repeat(cnt)} 80px 30px`;
             else document.getElementById('meterTable').style.gridTemplateColumns = `40px 1fr 1fr 1fr ${'1fr '.repeat(cnt)} 100px 30px`;
