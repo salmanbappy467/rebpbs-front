@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REBPBS Automation - Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #131314; color: #E3E3E3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .glass-card { background: #1E1F20; border: 1px solid #3C4043; border-radius: 1rem; transition: transform 0.3s; height: 100%; display: flex; flex-direction: column; }
+        .glass-card:hover { transform: translateY(-5px); border-color: #8AB4F8; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-6">
+
+    <div class="text-center mb-10">
+        <i class="fa-solid fa-bolt text-6xl text-[#8AB4F8] mb-4 animate-pulse"></i>
+        <h1 class="text-4xl font-bold text-white mb-2">RebPbs Automation System</h1>
+        <p class="text-gray-400">আপনার কাজকে সহজ করতে প্রয়োজনীয় টুলসগুলো বেছে নিন</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
+        
+        <div class="glass-card p-8 items-center text-center">
+            <div class="w-16 h-16 bg-blue-900/30 rounded-full flex items-center justify-center mb-4">
+                <i class="fa-solid fa-download text-3xl text-[#8AB4F8]"></i>
+            </div>
+            <h2 class="text-xl font-bold mb-2">সফটওয়্যার ডাউনলোড</h2>
+            <p class="text-sm text-gray-400 mb-6 leading-relaxed flex-grow">
+                মিটার পোস্টিং সঠিকভাবে কাজ করার জন্য প্রথমে নিচের ব্যাকএন্ড সফটওয়্যারটি ডাউনলোড করে রান করুন।
+            </p>
+            <a href="http://tinyurl.com/rebpbs-exe" target="_blank" class="w-full bg-[#8AB4F8] text-black font-bold py-3 rounded-lg hover:bg-blue-400 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-arrow-down"></i>
+                Download Backend
+            </a>
+        </div>
+
+        <div class="glass-card p-8 items-center text-center border-green-900/50">
+            <div class="w-16 h-16 bg-green-900/30 rounded-full flex items-center justify-center mb-4">
+                <i class="fa-solid fa-gauge-high text-3xl text-green-400"></i>
+            </div>
+            <h2 class="text-xl font-bold mb-2">অটোমেশন প্যানেল</h2>
+            <p class="text-sm text-gray-400 mb-6 leading-relaxed flex-grow">
+                সফটওয়্যারটি রান করার পর মিটার ডাটা এন্ট্রি এবং পোস্টিং করার জন্য এই প্যানেলে প্রবেশ করুন।
+            </p>
+            <a href="https://rebpbs-new.pages.dev/" class="w-full bg-green-600 text-white font-bold py-3 rounded-lg hover:bg-green-500 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-rocket"></i>
+                Open Automation
+            </a>
+        </div>
+
+        <div class="glass-card p-8 items-center text-center border-purple-900/50">
+            <div class="w-16 h-16 bg-purple-900/30 rounded-full flex items-center justify-center mb-4">
+                <i class="fa-solid fa-toolbox text-3xl text-purple-400"></i>
+            </div>
+            <h2 class="text-xl font-bold mb-2">সমস্ত টুলস ও API Key</h2>
+            <p class="text-sm text-gray-400 mb-6 leading-relaxed flex-grow">
+                সবগুলো অটোমেশন টুল এবং আপনার প্রয়োজনীয় API Key পেতে এখানে লগইন করুন।
+            </p>
+            <a href="https://pbsnet.pages.dev" target="_blank" class="w-full bg-purple-600 text-white font-bold py-3 rounded-lg hover:bg-purple-500 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-key"></i>
+                Get API Key & Tools
+            </a>
+        </div>
+
+    </div>
+
+    <footer class="mt-16 text-gray-500 text-xs text-center">
+        <p>© 2026 Rebpbs Automation Services. All rights reserved.</p>
+        <div class="flex justify-center gap-4 mt-2">
+            <span class="text-[#8AB4F8]"><i class="fa-solid fa-circle-check text-[8px]"></i> Backend Active</span>
+            <span class="text-purple-400"><i class="fa-solid fa-circle-check text-[8px]"></i> API Ready</span>
+        </div>
+    </footer>
+
+</body>
+</html>
